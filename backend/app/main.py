@@ -5,6 +5,7 @@ from typing import List, Optional
 from datetime import date, datetime
 import os
 from dotenv import load_dotenv
+from contextlib import asynccontextmanager
 
 from .database import engine, get_db
 from .models import Base, Task, TaskStatus
@@ -12,13 +13,27 @@ from .utils import calculate_priority_score, calculate_days_open
 
 load_dotenv()
 
-# Create database tables
-Base.metadata.create_all(bind=engine)
+def create_db_and_tables():
+    print("Creating database tables...")
+    Base.metadata.create_all(bind=engine)
+    print("Database tables created successfully.")
 
-app = FastAPI(title="Sales Task Tracker API", version="1.0.0")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # On startup
+    create_db_and_tables()
+    yield
+    # On shutdown
+    print("Application shutting down.")
+
+app = FastAPI(
+    title="Sales Task Tracker API", 
+    version="1.0.0",
+    lifespan=lifespan
+)
 
 # CORS configuration
-origins = os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",")
+origins = os.getenv("CORS_ORIGINS", "http://localhost:3000,http://localhost:3001").split(",")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
