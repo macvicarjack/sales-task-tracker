@@ -110,6 +110,7 @@ def get_tasks(
 
 @app.post("/tasks", response_model=TaskResponse)
 def create_task(task: TaskCreate, db: Session = Depends(get_db)):
+    print("Received task data:", task)
     """Create a new task"""
     task_data = task.model_dump()
     db_task = Task(**task_data)
