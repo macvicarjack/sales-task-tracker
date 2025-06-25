@@ -33,7 +33,7 @@ app = FastAPI(
 )
 
 # CORS configuration
-origins = os.getenv("CORS_ORIGINS", "http://localhost:3000,http://localhost:3001").split(",")
+origins = os.getenv("CORS_ORIGINS", "https://sales-tracker-frontend-k4us.onrender.com").split(",")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
