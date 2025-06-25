@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./sales_tracker.db")
+DATABASE_URL = os.getenv("DATABASE_URL", "https://sales-tracker-backend-1dp8.onrender.com")
 
 engine = create_engine(
     DATABASE_URL, connect_args={"check_same_thread": False} if "sqlite" in DATABASE_URL else {}
